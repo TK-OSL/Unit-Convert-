@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SI Unit Converter</title>
+    <!-- โหลด Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- โหลด Lucide Icons สำหรับ Vanilla JS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom scrollbar styles */
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 3px; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans pb-12 min-h-screen">
+
+    <!-- Header Section -->
+    <header class="bg-blue-700 text-white shadow-md">
+        <div class="max-w-4xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <i data-lucide="calculator" class="h-8 w-8 text-blue-200"></i>
+                    <h1 id="ui-title-main" class="text-2xl font-bold tracking-tight">SI Unit Converter</h1>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Language Toggle Switch -->
+                    <div class="flex items-center bg-slate-100 p-1 rounded-lg shadow-inner">
+                        <button id="lang-en" onclick="setLanguage('en')" class="px-3 py-1.5 rounded-md font-bold text-sm transition-all duration-200 text-slate-500 hover:text-blue-600">
+                            EN
+                        </button>
+                        <button id="lang-th" onclick="setLanguage('th')" class="px-3 py-1.5 rounded-md font-bold text-sm transition-all duration-200 bg-white text-orange-500 shadow-sm">
+                            TH
+                        </button>
+                    </div>
+                    
+                    <div class="hidden sm:flex items-center space-x-2 bg-blue-800 px-3 py-1.5 rounded-full text-sm">
+                        <i data-lucide="book-open" class="h-4 w-4"></i>
+                        <span id="ui-tutorial-btn">Interactive Tutorial</span>
+                    </div>
+                </div>
+            </div>
+            <p id="ui-subtitle-main" class="mt-3 text-blue-100 text-sm md:text-base">
+                Learn how to convert various units into the International System of Units (SI).
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        
+        <!-- Detailed Educational Guide Section -->
+        <div class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden mb-8">
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 lg:p-8">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="bg-blue-600 text-white p-2 rounded-lg">
+                        <i data-lucide="book-open" class="h-6 w-6"></i>
+                    </div>
+                    <h2 id="ui-guide-header" class="text-xl md:text-2xl font-bold text-slate-800">Learning Guide: Understanding SI Unit Conversion</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100/50 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <div class="bg-indigo-100 p-1.5 rounded text-indigo-700"><i data-lucide="info" class="h-5 w-5"></i></div>
+                            <h3 id="ui-guide-1-title" class="font-semibold text-slate-800 text-lg">1. What is the SI System?</h3>
+                        </div>
+                        <p id="ui-guide-1-desc" class="text-slate-600 text-sm leading-relaxed">
+                            The <strong>SI System (International System of Units)</strong> is the standard metric system used globally (e.g., meters, kilograms, seconds) to ensure consistency in science, engineering, and commerce.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100/50 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <div class="bg-emerald-100 p-1.5 rounded text-emerald-700"><i data-lucide="arrow-left-right" class="h-5 w-5"></i></div>
+                            <h3 id="ui-guide-2-title" class="font-semibold text-slate-800 text-lg">2. Conversion Principles</h3>
+                        </div>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            <span id="ui-guide-2-desc-1">We use a <strong>"Conversion Factor"</strong> or a specific formula to convert units:</span>
+                            <br/><br/>
+                            <span class="text-emerald-700 font-medium" id="ui-guide-2-desc-2">➔ To SI: Follow the base formula (usually multiply by the factor).</span>
+                            <br/>
+                            <span class="text-blue-700 font-medium" id="ui-guide-2-desc-3">➔ From SI: Use the inverse operation (if the original formula multiplies, you divide).</span>
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100/50 hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <div class="bg-amber-100 p-1.5 rounded text-amber-700"><i data-lucide="calculator" class="h-5 w-5"></i></div>
+                            <h3 id="ui-guide-3-title" class="font-semibold text-slate-800 text-lg">3. Calculation Example</h3>
+                        </div>
+                        <div class="text-slate-600 text-sm leading-relaxed space-y-2">
+                            <p id="ui-guide-3-desc">Suppose we know that <strong>1 foot = 0.3048 meters (SI)</strong></p>
+                            <div class="bg-slate-50 p-2 rounded border border-slate-100 text-xs font-mono">
+                                <span class="text-slate-500" id="ui-guide-3-ex1">Converting 10 feet ➔ m (Multiply)</span><br/>
+                                10 × 0.3048 = 3.048 m
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded border border-slate-100 text-xs font-mono">
+                                <span class="text-slate-500" id="ui-guide-3-ex2">Converting 3.048 m ➔ feet (Divide)</span><br/>
+                                3.048 ÷ 0.3048 = 10 feet
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 bg-blue-100/50 p-3 rounded-lg flex items-start sm:items-center text-sm text-blue-800">
+                    <i data-lucide="check-circle-2" class="h-5 w-5 mr-2 flex-shrink-0 text-blue-600"></i>
+                    <p id="ui-how-to-use"><strong>How to use:</strong> Select a category on the left, enter a number, and choose your unit. The system will show step-by-step calculations below. Use the toggle button to switch conversion modes.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mode Selection Toggle (Highly Visible before the calculator) -->
+        <div class="bg-slate-200/60 p-2 rounded-2xl flex flex-col sm:flex-row gap-2 mb-8 shadow-inner border border-slate-200">
+            <button id="btn-mode-to-si" onclick="setMode('to-si')" class="w-full py-4 px-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center transition-all duration-300 bg-blue-600 text-white shadow-md">
+                <i data-lucide="arrow-right" class="h-6 w-6 mr-2"></i>
+                <span id="ui-tab-to-si">Mode 1: Non-SI ➔ SI</span>
+            </button>
+            <button id="btn-mode-from-si" onclick="setMode('from-si')" class="w-full py-4 px-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center transition-all duration-300 bg-transparent text-slate-500 hover:bg-white hover:text-slate-800 hover:shadow-sm">
+                <i data-lucide="arrow-left-right" class="h-6 w-6 mr-2"></i>
+                <span id="ui-tab-from-si">Mode 2: SI ➔ Non-SI</span>
+            </button>
+        </div>
+
+        <!-- Converter Controls Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Left Column: Category Controls -->
+            <div class="md:col-span-1 space-y-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+                    <label id="ui-step-1-title" class="block text-sm font-medium text-slate-700 mb-3">
+                        1. Select Quantity to Measure
+                    </label>
+                    <div id="category-list" class="space-y-2 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                        <!-- Category buttons will be injected here by JS -->
+                    </div>
+                </div>
+
+                <!-- SI Unit Info for selected category -->
+                <div class="bg-amber-50 rounded-xl border border-amber-200 p-4">
+                    <div class="flex items-center space-x-2 text-amber-800 font-medium mb-1">
+                        <i data-lucide="check-circle-2" class="h-4 w-4"></i>
+                        <span id="ui-target-si-title">Target SI Unit</span>
+                    </div>
+                    <p id="si-info-text" class="text-amber-900 text-sm"></p>
+                    <div id="si-info-symbol" class="mt-2 text-2xl font-bold text-amber-600 text-center py-2 bg-amber-100/50 rounded-lg"></div>
+                </div>
+            </div>
+
+            <!-- Right Column: Interactive Converter & Results -->
+            <div class="md:col-span-2 space-y-6">
+                
+                <!-- Input Form -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
+                        <h3 id="form-title" class="text-xl font-bold text-slate-900">
+                            2. Enter Value to Convert
+                        </h3>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 items-center">
+                        <div class="w-full">
+                            <label id="input-label" class="block text-sm font-medium text-slate-600 mb-1">
+                                Numeric Value (Initial Unit)
+                            </label>
+                            <div class="relative flex items-center">
+                                <input
+                                    id="input-value"
+                                    type="number"
+                                    value="1"
+                                    class="w-full pl-4 pr-16 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow text-lg font-medium"
+                                    placeholder="e.g. 100"
+                                />
+                                <span id="input-unit-symbol" class="absolute right-4 text-slate-500 font-bold hidden"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full">
+                            <label id="select-label" class="block text-sm font-medium text-slate-600 mb-1">
+                                Initial Unit
+                            </label>
+                            <div class="relative group">
+                                <select
+                                    id="unit-select"
+                                    class="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none appearance-none cursor-pointer text-lg hover:border-blue-400 transition-colors font-medium text-slate-700"
+                                >
+                                    <!-- Options injected via JS -->
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400 group-hover:text-blue-500 transition-colors">
+                                    <i data-lucide="chevron-down" class="h-5 w-5"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        id="convert-btn"
+                        onclick="handleConvert()"
+                        class="mt-6 w-full font-bold py-4 px-4 rounded-xl flex items-center justify-center space-x-2 transition-colors duration-200 text-white shadow-md bg-blue-600 hover:bg-blue-700 text-lg"
+                    >
+                        <span id="ui-btn-calc">Calculate Conversion</span>
+                        <i data-lucide="arrow-right" class="h-6 w-6"></i>
+                    </button>
+                </div>
+
+                <!-- Results Display -->
+                <div id="result-box" class="hidden bg-white rounded-xl shadow-md border border-emerald-200 overflow-hidden transition-all duration-500">
+                    <div class="bg-emerald-50 px-6 py-4 border-b border-emerald-100 flex items-center justify-between">
+                        <h3 id="ui-res-title" class="text-emerald-800 font-bold text-lg">Conversion Result</h3>
+                        <button 
+                            onclick="resetResult()"
+                            class="text-emerald-600 hover:text-emerald-800 flex items-center text-sm font-medium bg-white/50 px-3 py-1.5 rounded-lg transition-colors hover:bg-white"
+                        >
+                            <i data-lucide="rotate-ccw" class="h-4 w-4 mr-1"></i> <span id="ui-res-reset">Reset</span>
+                        </button>
+                    </div>
+                    
+                    <div class="p-6">
+                        <!-- Big Number Result -->
+                        <div class="flex flex-wrap items-center justify-center gap-4 text-center md:text-left mb-8">
+                            <div class="bg-slate-100 px-4 py-3 rounded-lg flex items-baseline border border-slate-200">
+                                <span id="res-input-val" class="text-xl text-slate-700 font-medium">1</span>
+                                <span id="res-input-unit" class="text-sm text-slate-500 ml-1">Unit</span>
+                            </div>
+                            
+                            <i data-lucide="arrow-right" class="h-6 w-6 text-slate-400"></i>
+                            
+                            <div class="bg-emerald-100 px-6 py-4 rounded-xl border border-emerald-300 shadow-inner flex items-baseline">
+                                <span id="res-output-val" class="text-3xl font-bold text-emerald-800">Result</span>
+                                <span id="res-output-unit" class="text-xl font-bold text-emerald-600 ml-2">SI</span>
+                            </div>
+                        </div>
+
+                        <!-- Step by Step Explanation -->
+                        <div class="bg-slate-50 rounded-lg p-5 border border-slate-200">
+                            <h4 id="ui-step-logic-title" class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">
+                                Step-by-Step Logic
+                            </h4>
+                            <div class="space-y-3 font-mono text-sm text-slate-800">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0">
+                                    <span id="ui-lbl-factor" class="w-48 text-slate-500 flex-shrink-0 font-sans text-xs sm:text-sm font-medium">Conversion Factor:</span>
+                                    <span id="step-factor" class="bg-emerald-50 px-2 py-1 rounded border border-emerald-200 text-emerald-700 font-bold"></span>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0">
+                                    <span id="ui-lbl-principle" class="w-48 text-slate-500 flex-shrink-0 font-sans text-xs sm:text-sm font-medium">Principle:</span>
+                                    <span id="step-principle" class="bg-white px-2 py-1 rounded border border-slate-200 text-slate-600"></span>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0">
+                                    <span id="ui-lbl-formula" class="w-48 text-slate-500 flex-shrink-0 font-sans text-xs sm:text-sm font-medium">Formula:</span>
+                                    <span id="step-formula" class="bg-white px-2 py-1 rounded border border-slate-200 font-medium"></span>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0">
+                                    <span id="ui-lbl-calc" class="w-48 text-slate-500 flex-shrink-0 font-sans text-xs sm:text-sm font-medium">Substitute & Calculate:</span>
+                                    <span id="step-calc" class="bg-blue-50 px-2 py-1 rounded border border-blue-200 text-blue-700 font-bold"></span>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:items-center pt-4 border-t border-slate-200 mt-3 gap-1 sm:gap-0">
+                                    <span id="ui-lbl-final" class="w-48 font-bold text-emerald-600 flex-shrink-0 font-sans text-sm">Final Result:</span>
+                                    <span id="step-final" class="font-bold text-slate-900 text-base bg-emerald-100 px-3 py-1 rounded-md border border-emerald-300"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer & Credits -->
+    <footer class="max-w-4xl mx-auto px-4 mt-16 mb-8 sm:px-6 lg:px-8 text-center">
+        <div class="pt-8 border-t border-slate-200">
+            <p id="ui-footer-dev" class="text-slate-500 text-sm">
+                Developed with ❤️ by Gemini (Google AI) | Designed for learning
+            </p>
+            <div class="mt-2 text-slate-600 text-sm bg-slate-100 inline-block px-4 py-2 rounded-full shadow-sm">
+                <span id="ui-footer-credit">Special Thanks & Credits to: </span>
+                <a href="https://opensimlab.org" target="_blank" rel="noopener noreferrer" class="font-semibold text-blue-600 hover:text-blue-800 hover:underline transition-colors ml-1">
+                    OpenSimLab.org
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // State variables
+        let currentLang = 'en'; // Default language ('en' or 'th')
+        let currentCategory = 'length';
+        let currentMode = 'to-si'; // 'to-si' or 'from-si'
+
+        // Multi-language UI Texts
+        const uiTranslations = {
+            en: {
+                "ui-title-main": "SI Unit Converter",
+                "ui-tutorial-btn": "Interactive Tutorial",
+                "ui-subtitle-main": "Learn how to convert various units into the International System of Units (SI).",
+                "ui-tab-to-si": "Mode 1: Non-SI ➔ SI",
+                "ui-tab-from-si": "Mode 2: SI ➔ Non-SI",
+                "ui-guide-header": "Learning Guide: Understanding SI Unit Conversion",
+                "ui-guide-1-title": "1. What is the SI System?",
+                "ui-guide-1-desc": "The <strong>SI System (International System of Units)</strong> is the standard metric system used globally (e.g., meters, kilograms, seconds) to ensure consistency in science, engineering, and commerce.",
+                "ui-guide-2-title": "2. Conversion Principles",
+                "ui-guide-2-desc-1": "We use a <strong>\"Conversion Factor\"</strong> or a specific formula to convert units:",
+                "ui-guide-2-desc-2": "➔ To SI: Follow the base formula (usually multiply by the factor).",
+                "ui-guide-2-desc-3": "➔ From SI: Use the inverse operation (if the original formula multiplies, you divide).",
+                "ui-guide-3-title": "3. Calculation Example",
+                "ui-guide-3-desc": "Suppose we know that <strong>1 foot = 0.3048 meters (SI)</strong>",
+                "ui-guide-3-ex1": "Converting 10 feet ➔ m (Multiply)",
+                "ui-guide-3-ex2": "Converting 3.048 m ➔ feet (Divide)",
+                "ui-how-to-use": "<strong>How to use:</strong> Select a category on the left, enter a number, and choose your unit. The system will show step-by-step calculations below. Use the toggle button to switch conversion modes.",
+                "ui-step-1-title": "1. Select Quantity to Measure",
+                "ui-target-si-title": "Target SI Unit",
+                "ui-btn-calc": "Calculate Conversion",
+                "ui-res-title": "Conversion Result",
+                "ui-res-reset": "Reset",
+                "ui-step-logic-title": "Step-by-Step Logic",
+                "ui-lbl-factor": "Conversion Factor:",
+                "ui-lbl-principle": "Principle:",
+                "ui-lbl-formula": "Formula:",
+                "ui-lbl-calc": "Substitute & Calculate:",
+                "ui-lbl-final": "Final Result:",
+                "ui-footer-dev": "Developed with ❤️ by Gemini (Google AI) | Designed for learning",
+                "ui-footer-credit": "Special Thanks & Credits to: ",
+                // Dynamic labels
+                "dyn-form-title-to": "2. Enter Value to Convert",
+                "dyn-form-title-from": "2. Enter SI Value to Convert",
+                "dyn-input-label-to": "Numeric Value (Initial Unit)",
+                "dyn-input-label-from": "Numeric Value (SI Unit)",
+                "dyn-select-label-to": "Initial Unit",
+                "dyn-select-label-from": "Target Unit",
+                "dyn-factor-temp": "Uses specific temperature equation",
+                "dyn-principle-temp-to": "Substitute into base equation",
+                "dyn-principle-temp-from": "Substitute into inverse equation",
+                "dyn-principle-mult": "Multiply (×) the initial value by the conversion factor",
+                "dyn-principle-div": "Divide (÷) the initial value by the conversion factor",
+                "dyn-val-si": "[SI Value]",
+                "dyn-val-init": "[Initial Value]"
+            },
+            th: {
+                "ui-title-main": "เครื่องมือแปลงหน่วย SI",
+                "ui-tutorial-btn": "บทเรียนแบบโต้ตอบ",
+                "ui-subtitle-main": "เรียนรู้วิธีการแปลงหน่วยต่างๆ เป็นระบบหน่วยวัดระหว่างประเทศ (SI)",
+                "ui-tab-to-si": "โหมดที่ 1: หน่วยอื่น ➔ SI",
+                "ui-tab-from-si": "โหมดที่ 2: SI ➔ หน่วยอื่น",
+                "ui-guide-header": "คู่มือการเรียนรู้: ทำความเข้าใจการแปลงหน่วย SI",
+                "ui-guide-1-title": "1. ระบบ SI คืออะไร?",
+                "ui-guide-1-desc": "<strong>ระบบ SI (International System of Units)</strong> คือระบบหน่วยวัดมาตรฐานสากล (เช่น เมตร, กิโลกรัม, วินาที) ที่ใช้ทั่วโลกเพื่อให้เกิดความเข้าใจที่ตรงกันในทางวิทยาศาสตร์และวิศวกรรม",
+                "ui-guide-2-title": "2. หลักการแปลงหน่วย",
+                "ui-guide-2-desc-1": "เราใช้ <strong>\"ตัวคูณ (Conversion Factor)\"</strong> หรือสูตรเฉพาะในการแปลงหน่วย:",
+                "ui-guide-2-desc-2": "➔ แปลงเป็น SI: ทำตามสูตรเริ่มต้น (มักจะเป็นการคูณด้วยตัวคูณแฟกเตอร์)",
+                "ui-guide-2-desc-3": "➔ แปลงจาก SI: ทำการคำนวณแบบย้อนกลับ (ถ้าสูตรเดิมคูณ ให้เปลี่ยนเป็นหาร)",
+                "ui-guide-3-title": "3. ตัวอย่างการคำนวณ",
+                "ui-guide-3-desc": "สมมติว่าเรารู้ค่าว่า <strong>1 ฟุต = 0.3048 เมตร (SI)</strong>",
+                "ui-guide-3-ex1": "แปลง 10 ฟุต ➔ เมตร (นำไปคูณ)",
+                "ui-guide-3-ex2": "แปลง 3.048 เมตร ➔ ฟุต (นำไปหาร)",
+                "ui-how-to-use": "<strong>วิธีใช้:</strong> เลือกปริมาณที่ต้องการวัดด้านซ้าย, ป้อนตัวเลข, และเลือกหน่วยของท่าน ระบบจะแสดงขั้นตอนวิธีคิดอย่างละเอียดด้านล่าง สามารถใช้ปุ่มด้านบนเพื่อสลับโหมดการแปลง",
+                "ui-step-1-title": "1. เลือกปริมาณที่ต้องการวัด",
+                "ui-target-si-title": "หน่วย SI เป้าหมาย",
+                "ui-btn-calc": "คำนวณการแปลงหน่วย",
+                "ui-res-title": "ผลลัพธ์การแปลงหน่วย",
+                "ui-res-reset": "รีเซ็ต",
+                "ui-step-logic-title": "ขั้นตอนวิธีคิด (Step-by-Step)",
+                "ui-lbl-factor": "ตัวคูณแฟกเตอร์:",
+                "ui-lbl-principle": "หลักการคำนวณ:",
+                "ui-lbl-formula": "สูตรที่ใช้:",
+                "ui-lbl-calc": "แทนค่าและคำนวณ:",
+                "ui-lbl-final": "สรุปผลลัพธ์:",
+                "ui-footer-dev": "พัฒนาด้วย ❤️ โดย Gemini (Google AI) | ออกแบบมาเพื่อการศึกษา",
+                "ui-footer-credit": "ขอขอบคุณและให้เครดิตอ้างอิงจาก: ",
+                // Dynamic labels
+                "dyn-form-title-to": "2. ป้อนค่าที่ต้องการแปลง",
+                "dyn-form-title-from": "2. ป้อนค่า SI ที่ต้องการแปลง",
+                "dyn-input-label-to": "ค่าตัวเลข (หน่วยเริ่มต้น)",
+                "dyn-input-label-from": "ค่าตัวเลข (หน่วย SI)",
+                "dyn-select-label-to": "เลือกหน่วยเริ่มต้น",
+                "dyn-select-label-from": "เลือกหน่วยเป้าหมาย",
+                "dyn-factor-temp": "ใช้สูตรสมการอุณหภูมิเฉพาะ",
+                "dyn-principle-temp-to": "แทนค่าในสูตรสมการหลัก",
+                "dyn-principle-temp-from": "แทนค่าในสูตรสมการย้อนกลับ",
+                "dyn-principle-mult": "นำค่าเริ่มต้นไป คูณ (×) ด้วยตัวคูณแฟกเตอร์",
+                "dyn-principle-div": "นำค่าเริ่มต้นไป หาร (÷) ด้วยตัวคูณแฟกเตอร์",
+                "dyn-val-si": "[ค่า SI]",
+                "dyn-val-init": "[ค่าเริ่มต้น]"
+            }
+        };
+
+        // Multi-language Unit Conversion Data
+        const unitData = {
+            length: { 
+                name: { en: 'Length', th: 'ความยาว (Length)' }, 
+                siUnit: { en: 'Meter (m)', th: 'เมตร (m)' }, 
+                siSymbol: 'm', 
+                units: [ 
+                    { id: 'km', name: { en: 'Kilometer (km)', th: 'กิโลเมตร (km)' }, factor: 1000, formula: 'x * 1000' }, 
+                    { id: 'cm', name: { en: 'Centimeter (cm)', th: 'เซนติเมตร (cm)' }, factor: 0.01, formula: 'x / 100' }, 
+                    { id: 'mm', name: { en: 'Millimeter (mm)', th: 'มิลลิเมตร (mm)' }, factor: 0.001, formula: 'x / 1000' }, 
+                    { id: 'inch', name: { en: 'Inch (in)', th: 'นิ้ว (in)' }, factor: 0.0254, formula: 'x * 0.0254' }, 
+                    { id: 'foot', name: { en: 'Foot (ft)', th: 'ฟุต (ft)' }, factor: 0.3048, formula: 'x * 0.3048' }, 
+                    { id: 'yard', name: { en: 'Yard (yd)', th: 'หลา (yd)' }, factor: 0.9144, formula: 'x * 0.9144' }, 
+                    { id: 'mile', name: { en: 'Mile (mi)', th: 'ไมล์ (mi)' }, factor: 1609.344, formula: 'x * 1609.344' }, 
+                    { id: 'nautical_mile', name: { en: 'Nautical Mile (nmi)', th: 'ไมล์ทะเล (nmi)' }, factor: 1852, formula: 'x * 1852' } 
+                ], 
+                info: { en: 'The base SI unit for length is the Meter (m).', th: 'หน่วย SI พื้นฐานสำหรับความยาวคือ เมตร (m)' }
+            },
+            mass: { 
+                name: { en: 'Mass', th: 'มวล (Mass)' }, 
+                siUnit: { en: 'Kilogram (kg)', th: 'กิโลกรัม (kg)' }, 
+                siSymbol: 'kg', 
+                units: [ 
+                    { id: 'g', name: { en: 'Gram (g)', th: 'กรัม (g)' }, factor: 0.001, formula: 'x / 1000' }, 
+                    { id: 'mg', name: { en: 'Milligram (mg)', th: 'มิลลิกรัม (mg)' }, factor: 0.000001, formula: 'x / 1,000,000' }, 
+                    { id: 'ton', name: { en: 'Metric Ton (t)', th: 'เมตริกตัน (t)' }, factor: 1000, formula: 'x * 1000' }, 
+                    { id: 'lb', name: { en: 'Pound (lb)', th: 'ปอนด์ (lb)' }, factor: 0.45359237, formula: 'x * 0.45359237' }, 
+                    { id: 'oz', name: { en: 'Ounce (oz)', th: 'ออนซ์ (oz)' }, factor: 0.028349523125, formula: 'x * 0.0283495' }, 
+                    { id: 'stone', name: { en: 'Stone (st)', th: 'สโตน (st)' }, factor: 6.35029318, formula: 'x * 6.350293' } 
+                ], 
+                info: { en: 'The base SI unit for mass is the Kilogram (kg).', th: 'หน่วย SI พื้นฐานสำหรับมวลคือ กิโลกรัม (kg)' }
+            },
+            time: { 
+                name: { en: 'Time', th: 'เวลา (Time)' }, 
+                siUnit: { en: 'Second (s)', th: 'วินาที (s)' }, 
+                siSymbol: 's', 
+                units: [ 
+                    { id: 'min', name: { en: 'Minute (min)', th: 'นาที (min)' }, factor: 60, formula: 'x * 60' }, 
+                    { id: 'hr', name: { en: 'Hour (hr)', th: 'ชั่วโมง (hr)' }, factor: 3600, formula: 'x * 3600' }, 
+                    { id: 'day', name: { en: 'Day (day)', th: 'วัน (day)' }, factor: 86400, formula: 'x * 86400' }, 
+                    { id: 'week', name: { en: 'Week (week)', th: 'สัปดาห์ (week)' }, factor: 604800, formula: 'x * 604800' }, 
+                    { id: 'ms', name: { en: 'Millisecond (ms)', th: 'มิลลิวินาที (ms)' }, factor: 0.001, formula: 'x / 1000' } 
+                ], 
+                info: { en: 'The base SI unit for time is the Second (s).', th: 'หน่วย SI พื้นฐานสำหรับเวลาคือ วินาที (s)' }
+            },
+            temperature: { 
+                name: { en: 'Temperature', th: 'อุณหภูมิ (Temperature)' }, 
+                siUnit: { en: 'Kelvin (K)', th: 'เคลวิน (K)' }, 
+                siSymbol: 'K', 
+                units: [ 
+                    { id: 'c', name: { en: 'Celsius (°C)', th: 'องศาเซลเซียส (°C)' }, isTemp: true, toSI: (val) => val + 273.15, fromSI: (val) => val - 273.15, formula: 'x + 273.15', revFormula: 'x - 273.15' }, 
+                    { id: 'f', name: { en: 'Fahrenheit (°F)', th: 'องศาฟาเรนไฮต์ (°F)' }, isTemp: true, toSI: (val) => (val - 32) * 5/9 + 273.15, fromSI: (val) => (val - 273.15) * 9/5 + 32, formula: '(x - 32) * 5/9 + 273.15', revFormula: '(x - 273.15) * 9/5 + 32' } 
+                ], 
+                info: { en: 'The base SI unit for temperature is the Kelvin (K).', th: 'หน่วย SI พื้นฐานสำหรับอุณหภูมิคือ เคลวิน (K)' }
+            },
+            volume: { 
+                name: { en: 'Volume', th: 'ปริมาตร (Volume)' }, 
+                siUnit: { en: 'Cubic Meter (m³)', th: 'ลูกบาศก์เมตร (m³)' }, 
+                siSymbol: 'm³', 
+                units: [ 
+                    { id: 'l', name: { en: 'Liter (L)', th: 'ลิตร (L)' }, factor: 0.001, formula: 'x / 1000' }, 
+                    { id: 'ml', name: { en: 'Milliliter (mL, cc)', th: 'มิลลิลิตร (mL, cc)' }, factor: 0.000001, formula: 'x / 1,000,000' }, 
+                    { id: 'gal_us', name: { en: 'US Gallon (gal)', th: 'แกลลอน US (gal)' }, factor: 0.003785411784, formula: 'x * 0.00378541' }, 
+                    { id: 'gal_uk', name: { en: 'UK Gallon (gal)', th: 'แกลลอน UK (gal)' }, factor: 0.00454609, formula: 'x * 0.00454609' }, 
+                    { id: 'floz', name: { en: 'US Fluid Ounce (fl oz)', th: 'ออนซ์ของเหลว (fl oz)' }, factor: 0.00002957352956, formula: 'x * 0.00002957' } 
+                ], 
+                info: { en: 'The derived SI unit for volume is the Cubic Meter (m³).', th: 'หน่วย SI อนุพัทธ์สำหรับปริมาตรคือ ลูกบาศก์เมตร (m³)' }
+            },
+            speed: { 
+                name: { en: 'Speed', th: 'ความเร็ว (Speed)' }, 
+                siUnit: { en: 'Meter per second (m/s)', th: 'เมตรต่อวินาที (m/s)' }, 
+                siSymbol: 'm/s', 
+                units: [ 
+                    { id: 'kmh', name: { en: 'Kilometer/hour (km/h)', th: 'กิโลเมตร/ชั่วโมง (km/h)' }, factor: 5/18, formula: 'x * (5 / 18)' }, 
+                    { id: 'mph', name: { en: 'Mile/hour (mph)', th: 'ไมล์/ชั่วโมง (mph)' }, factor: 0.44704, formula: 'x * 0.44704' }, 
+                    { id: 'knot', name: { en: 'Knot (kn)', th: 'นอต (kn)' }, factor: 1852/3600, formula: 'x * (1852 / 3600)' } 
+                ], 
+                info: { en: 'The derived SI unit for speed is the Meter per second (m/s).', th: 'หน่วย SI อนุพัทธ์สำหรับความเร็วคือ เมตรต่อวินาที (m/s)' }
+            },
+            pressure: { 
+                name: { en: 'Pressure', th: 'ความดัน (Pressure)' }, 
+                siUnit: { en: 'Pascal (Pa)', th: 'ปาสกาล (Pa)' }, 
+                siSymbol: 'Pa', 
+                units: [ 
+                    { id: 'atm', name: { en: 'Atmosphere (atm)', th: 'บรรยากาศ (atm)' }, factor: 101325, formula: 'x * 101325' }, 
+                    { id: 'bar', name: { en: 'Bar (bar)', th: 'บาร์ (bar)' }, factor: 100000, formula: 'x * 100,000' }, 
+                    { id: 'psi', name: { en: 'Pound/sq inch (psi)', th: 'ปอนด์/ตร.นิ้ว (psi)' }, factor: 6894.757293, formula: 'x * 6894.757' }, 
+                    { id: 'mmHg', name: { en: 'Millimeter of mercury (mmHg)', th: 'มิลลิเมตรปรอท (mmHg)' }, factor: 133.322387, formula: 'x * 133.322' }, 
+                    { id: 'torr', name: { en: 'Torr (Torr)', th: 'ทอร์ (Torr)' }, factor: 101325/760, formula: 'x * (101325 / 760)' } 
+                ], 
+                info: { en: 'The derived SI unit for pressure is the Pascal (Pa).', th: 'หน่วย SI อนุพัทธ์สำหรับความดันคือ ปาสกาล (Pa)' }
+            },
+            energy: { 
+                name: { en: 'Energy', th: 'พลังงาน (Energy)' }, 
+                siUnit: { en: 'Joule (J)', th: 'จูล (J)' }, 
+                siSymbol: 'J', 
+                units: [ 
+                    { id: 'cal', name: { en: 'Calorie (cal)', th: 'แคลอรี (cal)' }, factor: 4.184, formula: 'x * 4.184' }, 
+                    { id: 'kcal', name: { en: 'Kilocalorie (kcal)', th: 'กิโลแคลอรี (kcal)' }, factor: 4184, formula: 'x * 4184' }, 
+                    { id: 'kwh', name: { en: 'Kilowatt-hour (kWh)', th: 'กิโลวัตต์ชั่วโมง (kWh)' }, factor: 3600000, formula: 'x * 3,600,000' }, 
+                    { id: 'eV', name: { en: 'Electronvolt (eV)', th: 'อิเล็กตรอนโวลต์ (eV)' }, factor: 1.602176634e-19, formula: 'x * 1.602176 × 10^-19' }, 
+                    { id: 'btu', name: { en: 'British Thermal Unit (BTU)', th: 'บีทียู (BTU)' }, factor: 1055.055852, formula: 'x * 1055.055' } 
+                ], 
+                info: { en: 'The derived SI unit for energy is the Joule (J).', th: 'หน่วย SI อนุพัทธ์สำหรับพลังงานคือ จูล (J)' }
+            },
+            area: { 
+                name: { en: 'Area', th: 'พื้นที่ (Area)' }, 
+                siUnit: { en: 'Square Meter (m²)', th: 'ตารางเมตร (m²)' }, 
+                siSymbol: 'm²', 
+                units: [ 
+                    { id: 'sq_cm', name: { en: 'Square Centimeter (cm²)', th: 'ตารางเซนติเมตร (cm²)' }, factor: 0.0001, formula: 'x / 10000' }, 
+                    { id: 'sq_in', name: { en: 'Square Inch (sq in)', th: 'ตารางนิ้ว (sq in)' }, factor: 0.00064516, formula: 'x * 0.00064516' }, 
+                    { id: 'sq_ft', name: { en: 'Square Foot (sq ft)', th: 'ตารางฟุต (sq ft)' }, factor: 0.09290304, formula: 'x * 0.09290304' }, 
+                    { id: 'ha', name: { en: 'Hectare (ha)', th: 'เฮกตาร์ (ha)' }, factor: 10000, formula: 'x * 10000' }, 
+                    { id: 'acre', name: { en: 'Acre (ac)', th: 'เอเคอร์ (ac)' }, factor: 4046.856422, formula: 'x * 4046.856' }, 
+                    { id: 'rai', name: { en: 'Rai (Thai)', th: 'ไร่ (Rai)' }, factor: 1600, formula: 'x * 1600' }, 
+                    { id: 'ngan', name: { en: 'Ngan (Thai)', th: 'งาน (Ngan)' }, factor: 400, formula: 'x * 400' }, 
+                    { id: 'sq_wa', name: { en: 'Square Wa (Thai)', th: 'ตารางวา (sq wa)' }, factor: 4, formula: 'x * 4' } 
+                ], 
+                info: { en: 'The derived SI unit for area is the Square Meter (m²).', th: 'หน่วย SI อนุพัทธ์สำหรับพื้นที่คือ ตารางเมตร (m²)' }
+            },
+            force: { 
+                name: { en: 'Force', th: 'แรง (Force)' }, 
+                siUnit: { en: 'Newton (N)', th: 'นิวตัน (N)' }, 
+                siSymbol: 'N', 
+                units: [ 
+                    { id: 'kgf', name: { en: 'Kilogram-force (kgf)', th: 'กิโลกรัม-ฟอร์ซ (kgf)' }, factor: 9.80665, formula: 'x * 9.80665' }, 
+                    { id: 'lbf', name: { en: 'Pound-force (lbf)', th: 'ปอนด์-ฟอร์ซ (lbf)' }, factor: 4.448221615, formula: 'x * 4.44822' }, 
+                    { id: 'dyne', name: { en: 'Dyne (dyn)', th: 'ไดน์ (dyn)' }, factor: 0.00001, formula: 'x / 100,000' } 
+                ], 
+                info: { en: 'The derived SI unit for force is the Newton (N).', th: 'หน่วย SI อนุพัทธ์สำหรับแรงคือ นิวตัน (N)' }
+            },
+            power: { 
+                name: { en: 'Power', th: 'กำลัง (Power)' }, 
+                siUnit: { en: 'Watt (W)', th: 'วัตต์ (W)' }, 
+                siSymbol: 'W', 
+                units: [ 
+                    { id: 'kw', name: { en: 'Kilowatt (kW)', th: 'กิโลวัตต์ (kW)' }, factor: 1000, formula: 'x * 1000' }, 
+                    { id: 'hp_mech', name: { en: 'Horsepower (hp - Mech)', th: 'แรงม้า (hp - เชิงกล)' }, factor: 745.699872, formula: 'x * 745.699' }, 
+                    { id: 'hp_metric', name: { en: 'Horsepower (hp - Metric)', th: 'แรงม้า (hp - เมตริก)' }, factor: 735.49875, formula: 'x * 735.498' }, 
+                    { id: 'kcal_h', name: { en: 'Kilocalorie/hour (kcal/h)', th: 'กิโลแคลอรี/ชั่วโมง (kcal/h)' }, factor: 1.162222, formula: 'x * 1.16222' } 
+                ], 
+                info: { en: 'The derived SI unit for power is the Watt (W).', th: 'หน่วย SI อนุพัทธ์สำหรับกำลังคือ วัตต์ (W)' }
+            },
+            angle: { 
+                name: { en: 'Angle', th: 'มุม (Angle)' }, 
+                siUnit: { en: 'Radian (rad)', th: 'เรเดียน (rad)' }, 
+                siSymbol: 'rad', 
+                units: [ 
+                    { id: 'deg', name: { en: 'Degree (°)', th: 'องศา (°)' }, factor: Math.PI / 180, formula: 'x * (π / 180)' }, 
+                    { id: 'arcmin', name: { en: 'Arcminute (\')', th: 'ลิปดา (\')' }, factor: Math.PI / 10800, formula: 'x * (π / 10800)' }, 
+                    { id: 'rev', name: { en: 'Revolution (rev)', th: 'รอบ (rev)' }, factor: 2 * Math.PI, formula: 'x * 2π' } 
+                ], 
+                info: { en: 'The derived SI unit for angle is the Radian (rad).', th: 'หน่วย SI อนุพัทธ์สำหรับมุมคือ เรเดียน (rad)' }
+            },
+            density: { 
+                name: { en: 'Density', th: 'ความหนาแน่น (Density)' }, 
+                siUnit: { en: 'Kilogram per cubic meter (kg/m³)', th: 'กิโลกรัมต่อลบ.ม. (kg/m³)' }, 
+                siSymbol: 'kg/m³', 
+                units: [ 
+                    { id: 'g_cm3', name: { en: 'Gram/cubic cm (g/cm³)', th: 'กรัมต่อลบ.ซม. (g/cm³)' }, factor: 1000, formula: 'x * 1000' }, 
+                    { id: 'kg_l', name: { en: 'Kilogram/liter (kg/L)', th: 'กิโลกรัมต่อลิตร (kg/L)' }, factor: 1000, formula: 'x * 1000' }, 
+                    { id: 'lb_ft3', name: { en: 'Pound/cubic foot (lb/ft³)', th: 'ปอนด์ต่อลบ.ฟุต (lb/ft³)' }, factor: 16.018463, formula: 'x * 16.01846' } 
+                ], 
+                info: { en: 'The derived SI unit for density is the Kilogram per cubic meter (kg/m³).', th: 'หน่วย SI อนุพัทธ์สำหรับความหนาแน่นคือ กิโลกรัมต่อลูกบาศก์เมตร (kg/m³)' }
+            },
+            frequency: { 
+                name: { en: 'Frequency', th: 'ความถี่ (Frequency)' }, 
+                siUnit: { en: 'Hertz (Hz)', th: 'เฮิรตซ์ (Hz)' }, 
+                siSymbol: 'Hz', 
+                units: [ 
+                    { id: 'rpm', name: { en: 'Revolutions per minute (RPM)', th: 'รอบต่อนาที (RPM)' }, factor: 1/60, formula: 'x / 60' }, 
+                    { id: 'khz', name: { en: 'Kilohertz (kHz)', th: 'กิโลเฮิรตซ์ (kHz)' }, factor: 1000, formula: 'x * 1000' }, 
+                    { id: 'mhz', name: { en: 'Megahertz (MHz)', th: 'เมกะเฮิรตซ์ (MHz)' }, factor: 1000000, formula: 'x * 1,000,000' } 
+                ], 
+                info: { en: 'The derived SI unit for frequency is the Hertz (Hz) (cycles per second).', th: 'หน่วย SI อนุพัทธ์สำหรับความถี่คือ เฮิรตซ์ (Hz)' }
+            },
+            charge: { 
+                name: { en: 'Electric Charge', th: 'ประจุไฟฟ้า (Charge)' }, 
+                siUnit: { en: 'Coulomb (C)', th: 'คูลอมบ์ (C)' }, 
+                siSymbol: 'C', 
+                units: [ 
+                    { id: 'Ah', name: { en: 'Ampere-hour (Ah)', th: 'แอมแปร์-ชั่วโมง (Ah)' }, factor: 3600, formula: 'x * 3600' }, 
+                    { id: 'mAh', name: { en: 'Milliampere-hour (mAh)', th: 'มิลลิแอมแปร์-ชั่วโมง (mAh)' }, factor: 3.6, formula: 'x * 3.6' } 
+                ], 
+                info: { en: 'The derived SI unit for electric charge is the Coulomb (C).', th: 'หน่วย SI อนุพัทธ์สำหรับประจุไฟฟ้าคือ คูลอมบ์ (C)' }
+            }
+        };
+
+        // DOM Elements
+        const categoryList = document.getElementById('category-list');
+        const unitSelect = document.getElementById('unit-select');
+        const inputValueElem = document.getElementById('input-value');
+        const resultBox = document.getElementById('result-box');
+
+        // Initialize App
+        function initApp() {
+            setLanguage(currentLang);
+        }
+
+        // Change Language
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Update Toggle UI styles matching screenshot
+            const btnEn = document.getElementById('lang-en');
+            const btnTh = document.getElementById('lang-th');
+            
+            if (lang === 'en') {
+                btnEn.className = "px-3 py-1.5 rounded-md font-bold text-sm transition-all duration-200 bg-white text-blue-600 shadow-sm";
+                btnTh.className = "px-3 py-1.5 rounded-md font-bold text-sm transition-all duration-200 text-slate-500 hover:text-orange-500";
+            } else {
+                btnEn.className = "px-3 py-1.5 rounded-md font-bold text-sm transition-all duration-200 text-slate-500 hover:text-blue-600";
+                btnTh.className = "px-3 py-1.5 rounded-md font-bold text-sm transition-all duration-200 bg-white text-orange-500 shadow-sm";
+            }
+
+            // Update Static Texts
+            const translations = uiTranslations[lang];
+            Object.keys(translations).forEach(key => {
+                const element = document.getElementById(key);
+                if (element && !key.startsWith('dyn-')) {
+                    element.innerHTML = translations[key];
+                }
+            });
+
+            // Re-render components with new language
+            renderCategories();
+            updateUI();
+            
+            // If result is shown, trigger recalculate to update output languages
+            if (!resultBox.classList.contains('hidden')) {
+                handleConvert();
+            }
+        }
+
+        // Render Categories
+        function renderCategories() {
+            categoryList.innerHTML = '';
+            Object.entries(unitData).forEach(([key, data]) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-4 py-3 rounded-lg border transition-all duration-200 ${currentCategory === key ? 'border-blue-500 bg-blue-50 text-blue-700 font-medium' : 'border-slate-200 hover:border-blue-300 hover:bg-slate-50'}`;
+                btn.innerText = data.name[currentLang];
+                btn.onclick = () => setCategory(key);
+                categoryList.appendChild(btn);
+            });
+        }
+
+        // Change Category
+        function setCategory(key) {
+            currentCategory = key;
+            renderCategories(); // Re-render to update selected style
+            resetResult();
+            updateUI();
+        }
+
+        // Change Mode
+        function setMode(mode) {
+            currentMode = mode;
+            
+            const btnToSI = document.getElementById('btn-mode-to-si');
+            const btnFromSI = document.getElementById('btn-mode-from-si');
+            const convertBtn = document.getElementById('convert-btn');
+            
+            const activeToSIClass = "w-full py-4 px-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center transition-all duration-300 bg-blue-600 text-white shadow-md";
+            const inactiveToSIClass = "w-full py-4 px-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center transition-all duration-300 bg-transparent text-slate-500 hover:bg-white hover:text-slate-800 hover:shadow-sm";
+            
+            const activeFromSIClass = "w-full py-4 px-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center transition-all duration-300 bg-emerald-600 text-white shadow-md";
+            const inactiveFromSIClass = "w-full py-4 px-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center transition-all duration-300 bg-transparent text-slate-500 hover:bg-white hover:text-slate-800 hover:shadow-sm";
+
+            if(mode === 'to-si') {
+                btnToSI.className = activeToSIClass;
+                btnFromSI.className = inactiveFromSIClass;
+                convertBtn.className = "mt-6 w-full font-bold py-4 px-4 rounded-xl flex items-center justify-center space-x-2 transition-colors duration-200 text-white shadow-md bg-blue-600 hover:bg-blue-700 text-lg";
+            } else {
+                btnToSI.className = inactiveToSIClass;
+                btnFromSI.className = activeFromSIClass;
+                convertBtn.className = "mt-6 w-full font-bold py-4 px-4 rounded-xl flex items-center justify-center space-x-2 transition-colors duration-200 text-white shadow-md bg-emerald-600 hover:bg-emerald-700 text-lg";
+            }
+            
+            resetResult();
+            updateUI();
+        }
+
+        // Update UI Text & Select Options dynamically based on state
+        function updateUI() {
+            const data = unitData[currentCategory];
+            const isReverse = currentMode === 'from-si';
+            const trans = uiTranslations[currentLang];
+
+            // Update Info Box
+            document.getElementById('si-info-text').innerText = data.info[currentLang];
+            document.getElementById('si-info-symbol').innerText = data.siUnit[currentLang];
+
+            // Update Labels
+            document.getElementById('form-title').innerText = isReverse ? trans["dyn-form-title-from"] : trans["dyn-form-title-to"];
+            document.getElementById('input-label').innerText = isReverse ? trans["dyn-input-label-from"] : trans["dyn-input-label-to"];
+            document.getElementById('select-label').innerText = isReverse ? trans["dyn-select-label-from"] : trans["dyn-select-label-to"];
+
+            // Update Input Symbol (Show SI symbol in Mode 2)
+            const inputSymbolElem = document.getElementById('input-unit-symbol');
+            if (isReverse) {
+                inputSymbolElem.innerText = data.siSymbol;
+                inputSymbolElem.classList.remove('hidden');
+            } else {
+                inputSymbolElem.classList.add('hidden');
+            }
+
+            // Update Select Options (preserve selection if exists)
+            const currentSelected = unitSelect.value;
+            unitSelect.innerHTML = '';
+            data.units.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u.id;
+                opt.innerText = u.name[currentLang];
+                unitSelect.appendChild(opt);
+            });
+            if(currentSelected && Array.from(unitSelect.options).some(o => o.value === currentSelected)) {
+                unitSelect.value = currentSelected;
+            }
+        }
+
+        // Handle Conversion
+        function handleConvert() {
+            const val = parseFloat(inputValueElem.value);
+            if (isNaN(val)) return;
+
+            const isReverse = currentMode === 'from-si';
+            const data = unitData[currentCategory];
+            const selectedUnit = data.units.find(u => u.id === unitSelect.value);
+            const trans = uiTranslations[currentLang];
+            
+            let calculatedResult = 0;
+            let baseFormula = '';
+
+            // Math Logic
+            if (!isReverse) {
+                if (selectedUnit.isTemp) {
+                    calculatedResult = selectedUnit.toSI(val);
+                    baseFormula = selectedUnit.formula;
+                } else {
+                    calculatedResult = val * selectedUnit.factor;
+                    baseFormula = selectedUnit.formula;
+                }
+            } else {
+                if (selectedUnit.isTemp) {
+                    calculatedResult = selectedUnit.fromSI(val);
+                    baseFormula = selectedUnit.revFormula;
+                } else {
+                    calculatedResult = val / selectedUnit.factor;
+                    baseFormula = selectedUnit.formula.includes('*') 
+                        ? selectedUnit.formula.replace('*', '/')
+                        : selectedUnit.formula.replace('/', '*');
+                }
+            }
+
+            let stepFormula = baseFormula.replace(/x/g, val);
+
+            // Format formatting
+            let formattedResult;
+            if (calculatedResult === 0) {
+                formattedResult = 0;
+            } else if (Math.abs(calculatedResult) < 0.0001 || Math.abs(calculatedResult) >= 10000000) {
+                formattedResult = calculatedResult.toExponential(4);
+            } else {
+                formattedResult = Number.isInteger(calculatedResult) 
+                    ? calculatedResult 
+                    : parseFloat(calculatedResult.toPrecision(7));
+            }
+
+            // Names for output
+            // Name format from data: e.g. "Meter (m)" or "เมตร (m)". We extract the symbol in parentheses for display.
+            const extractSymbol = (str) => { const match = str.match(/\((.*?)\)/); return match ? match[1] : str; };
+            const unitNameText = extractSymbol(selectedUnit.name[currentLang]);
+            
+            const fromName = isReverse ? data.siSymbol : unitNameText;
+            const toName = isReverse ? unitNameText : data.siSymbol;
+
+            // Update Result DOM
+            document.getElementById('res-input-val').innerText = val;
+            document.getElementById('res-input-unit').innerText = fromName;
+            document.getElementById('res-output-val').innerText = formattedResult;
+            document.getElementById('res-output-unit').innerText = toName;
+
+            // Update Steps DOM logic strings
+            document.getElementById('step-factor').innerText = selectedUnit.isTemp ? trans["dyn-factor-temp"] : `${selectedUnit.factor}`;
+            
+            if (selectedUnit.isTemp) {
+                document.getElementById('step-principle').innerText = isReverse ? trans["dyn-principle-temp-from"] : trans["dyn-principle-temp-to"];
+            } else {
+                document.getElementById('step-principle').innerText = isReverse ? trans["dyn-principle-div"] : trans["dyn-principle-mult"];
+            }
+
+            document.getElementById('step-formula').innerText = baseFormula.replace('x', isReverse ? trans["dyn-val-si"] : trans["dyn-val-init"]);
+            document.getElementById('step-calc').innerText = stepFormula;
+            document.getElementById('step-final').innerText = `${val} ${fromName} = ${formattedResult} ${toName}`;
+
+            // Show Result Box
+            resultBox.classList.remove('hidden');
+        }
+
+        // Reset Result
+        function resetResult() {
+            resultBox.classList.add('hidden');
+            inputValueElem.value = '1';
+        }
+
+        // Run setup
+        initApp();
+
+    </script>
+</body>
+</html>
